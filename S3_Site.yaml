@@ -1,13 +1,23 @@
 AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+
+  BucketName:
+    Type: String
+    Default: TestBucketName
+    Description: Enter EKS cluster name.
+    
 Resources:
+
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
+      BucketName: !Ref BucketName
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
+    
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -25,6 +35,7 @@ Resources:
                 - !Ref S3Bucket
                 - /*
       Bucket: !Ref S3Bucket
+      
 Outputs:
   WebsiteURL:
     Value: !GetAtt 
